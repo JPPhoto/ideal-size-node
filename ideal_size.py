@@ -5,18 +5,18 @@ from typing import Literal
 from pydantic import BaseModel, Field
 import numpy as np
 
-from .baseinvocation import (
+from invokeai.app.invocations.baseinvocation import (
     BaseInvocation,
     BaseInvocationOutput,
     InvocationContext,
     InvocationConfig,
 )
 
-from .model import ModelInfo, UNetField, VaeField
+from invokeai.app.invocations.model import ModelInfo, UNetField, VaeField
 
 import math
 
-from ...backend.model_management import BaseModelType
+from invokeai.backend.model_management import BaseModelType
 
 class IdealSizeOutput(BaseInvocationOutput):
     """Base class for invocations that output an image"""
