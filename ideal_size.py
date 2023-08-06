@@ -39,6 +39,7 @@ class IdealSizeInvocation(BaseInvocation):
     height: int = Field(default=576, description="Target height")
     unet: UNetField = Field(default=None, description="UNet submodel")
     vae: VaeField = Field(default=None, description="Vae submodel")
+    multiplier: float = Field(default=1.0, description="Dimensional multiplier")
     # fmt: on
 
     class Config(InvocationConfig):
@@ -59,6 +60,7 @@ class IdealSizeInvocation(BaseInvocation):
             dimension = 768
         elif self.unet.unet.base_model == BaseModelType.StableDiffusionXL:
             dimension = 1024
+        dimension = dimension * self.multiplier
         min_dimension = math.floor(dimension * 0.5)
         model_area = dimension * dimension # hardcoded for now since all models are trained on square images
 
