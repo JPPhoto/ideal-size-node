@@ -1,15 +1,16 @@
 # Copyright (c) 2023 Jonathan S. Pollack (https://github.com/JPPhoto)
 
-from typing import Literal
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 import numpy as np
 
 from invokeai.app.invocations.baseinvocation import (
     BaseInvocation,
     BaseInvocationOutput,
+    InputField,
     InvocationContext,
-    InvocationConfig,
+    invocation,
+    invocation_output,
+    OutputField,
 )
 
 from invokeai.app.invocations.model import ModelInfo, UNetField, VaeField
@@ -18,37 +19,22 @@ import math
 
 from invokeai.backend.model_management import BaseModelType
 
+@invocation_output("ideal_size_output")
 class IdealSizeOutput(BaseInvocationOutput):
     """Base class for invocations that output an image"""
 
-    # fmt: off
-    type: Literal["ideal_size_output"] = "ideal_size_output"
-    width:             int = Field(description="The ideal width of the image in pixels")
-    height:            int = Field(description="The ideal height of the image in pixels")
-    # fmt: on
+    width: int = OutputField(description="The ideal width of the image in pixels")
+    height: int = OutputField(description="The ideal height of the image in pixels")
 
-    class Config:
-        schema_extra = {"required": ["type", "width", "height"]}
-
+@invocation("ideal_size", title="Ideal Size", tags=["math", "ideal_size"])
 class IdealSizeInvocation(BaseInvocation):
     """Calculates the ideal size for generation to avoid duplication"""
 
-    # fmt: off
-    type: Literal["ideal_size"] = "ideal_size"
-    width: int = Field(default=1024, description="Target width")
-    height: int = Field(default=576, description="Target height")
-    unet: UNetField = Field(default=None, description="UNet submodel")
-    vae: VaeField = Field(default=None, description="Vae submodel")
-    multiplier: float = Field(default=1.0, description="Dimensional multiplier")
-    # fmt: on
-
-    class Config(InvocationConfig):
-        schema_extra = {
-            "ui": {
-                "title": "Ideal Size",
-                "tags": ["math", "ideal_size"]
-            },
-        }
+    width: int = InputField(default=1024, description="Target width")
+    height: int = InputField(default=576, description="Target height")
+    unet: UNetField = InputField(default=None, description="UNet submodel")
+    vae: VaeField = InputField(default=None, description="Vae submodel")
+    multiplier: float = InputField(default=1.0, description="Dimensional multiplier")
 
     def trim_to_multiple_of(self, *args, multiple_of=8):
         return tuple((x - x % multiple_of) for x in args)
