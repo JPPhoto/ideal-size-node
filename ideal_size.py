@@ -19,6 +19,7 @@ import math
 
 from invokeai.backend.model_management import BaseModelType
 
+
 @invocation_output("ideal_size_output")
 class IdealSizeOutput(BaseInvocationOutput):
     """Base class for invocations that output an image"""
@@ -26,7 +27,8 @@ class IdealSizeOutput(BaseInvocationOutput):
     width: int = OutputField(description="The ideal width of the image in pixels")
     height: int = OutputField(description="The ideal height of the image in pixels")
 
-@invocation("ideal_size", title="Ideal Size", tags=["math", "ideal_size"])
+
+@invocation("ideal_size", title="Ideal Size", tags=["math", "ideal_size"], version="1.0.0")
 class IdealSizeInvocation(BaseInvocation):
     """Calculates the ideal size for generation to avoid duplication"""
 
@@ -59,7 +61,7 @@ class IdealSizeInvocation(BaseInvocation):
 
         scaled_width, scaled_height = self.trim_to_multiple_of(
             math.floor(init_width),
-            math.floor(init_height)
+            math.floor(init_height),
         )
 
         return IdealSizeOutput(width=scaled_width, height=scaled_height)
