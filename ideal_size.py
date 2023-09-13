@@ -1,22 +1,20 @@
 # Copyright (c) 2023 Jonathan S. Pollack (https://github.com/JPPhoto)
 
-from pydantic import BaseModel
+import math
+
 import numpy as np
+from pydantic import BaseModel
 
 from invokeai.app.invocations.baseinvocation import (
     BaseInvocation,
     BaseInvocationOutput,
     InputField,
     InvocationContext,
+    OutputField,
     invocation,
     invocation_output,
-    OutputField,
 )
-
 from invokeai.app.invocations.model import ModelInfo, UNetField, VaeField
-
-import math
-
 from invokeai.backend.model_management import BaseModelType
 
 
@@ -43,14 +41,14 @@ class IdealSizeInvocation(BaseInvocation):
 
     def invoke(self, context: InvocationContext) -> IdealSizeOutput:
         aspect = self.width / self.height
-        dimension = 512 # self.model.unet.config.sample_size * self.model.vae_scale_factor
+        dimension = 512  # self.model.unet.config.sample_size * self.model.vae_scale_factor
         if self.unet.unet.base_model == BaseModelType.StableDiffusion2:
             dimension = 768
         elif self.unet.unet.base_model == BaseModelType.StableDiffusionXL:
             dimension = 1024
         dimension = dimension * self.multiplier
         min_dimension = math.floor(dimension * 0.5)
-        model_area = dimension * dimension # hardcoded for now since all models are trained on square images
+        model_area = dimension * dimension  # hardcoded for now since all models are trained on square images
 
         if aspect > 1.0:
             init_height = max(min_dimension, math.sqrt(model_area / aspect))
