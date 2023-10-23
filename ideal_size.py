@@ -26,7 +26,7 @@ class IdealSizeOutput(BaseInvocationOutput):
     height: int = OutputField(description="The ideal height of the image in pixels")
 
 
-@invocation("ideal_size", title="Ideal Size", tags=["math", "ideal_size"], version="1.0.0")
+@invocation("ideal_size", title="Ideal Size", tags=["math", "ideal_size"], version="1.0.1")
 class IdealSizeInvocation(BaseInvocation):
     """Calculates the ideal size for generation to avoid duplication"""
 
