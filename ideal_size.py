@@ -2,9 +2,6 @@
 
 import math
 
-import numpy as np
-from pydantic import BaseModel
-
 from invokeai.app.invocations.baseinvocation import (
     BaseInvocation,
     BaseInvocationOutput,
@@ -14,7 +11,7 @@ from invokeai.app.invocations.baseinvocation import (
     invocation,
     invocation_output,
 )
-from invokeai.app.invocations.model import ModelInfo, UNetField, VaeField
+from invokeai.app.invocations.model import UNetField, VaeField
 from invokeai.backend.model_management import BaseModelType
 
 
